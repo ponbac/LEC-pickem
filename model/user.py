@@ -2,9 +2,11 @@ class User:
     def __init__(self, name):
         self.name = name
         self.score = 0
+        self.current_matches = []
 
-    def get_score(self):
-        return self.score
+    def place_bet(self, match):
+        for m in self.current_matches:
+            if match.match_id == m.match_id:
+                break
 
-    def set_score(self, new_score):
-        self.score = new_score
+        self.current_matches.append(match)
