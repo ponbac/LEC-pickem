@@ -34,7 +34,7 @@ class ScheduleParser:
     # Get matches as match-objects
     def get_matches(self):
         for x in self.week:
-            self.match_counter += 1
+            ScheduleParser.match_counter += 1
 
             teams = x.find_all('td')[1].find_all('div')[0].text
             team1 = self.pickem.get_team(teams[:4].strip())
@@ -46,10 +46,10 @@ class ScheduleParser:
             # Check winner
             if int(result[0]) > int(result[-1:]):
                 match.winner = team1
-                print(str(self.match_counter) + ': ' + team1.name + ' won! Score: ' + str(team1.score))
+                print(str(ScheduleParser.match_counter) + ': ' + team1.name + ' won! Score: ' + str(team1.score))
             elif int(result[0]) < int(result[-1:]):
                 match.winner = team2
-                print(str(self.match_counter) + ': ' + team2.name + ' won! Score: ' + str(team2.score))
+                print(str(ScheduleParser.match_counter) + ': ' + team2.name + ' won! Score: ' + str(team2.score))
             else:
                 print('No winner yet!')
 

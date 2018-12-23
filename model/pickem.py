@@ -13,9 +13,9 @@ class Pickem:
     def get_team(self, key):
         # Check if team already exists, if not create new
         try:
-            self.teams[key]
+            Pickem.teams[key]
         except KeyError as e:
             new_team = Team(key)
-            self.teams[key] = new_team
+            Pickem.teams[key] = new_team
 
-        return self.teams[key]
+        return Pickem.teams[key]
