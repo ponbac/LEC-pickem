@@ -5,6 +5,8 @@ from model.pickem import Pickem
 
 
 class ScheduleParser:
+    match_counter = 0
+
     def __init__(self, week_as_int):
         # Create pickem instance
         self.pickem = Pickem()
@@ -31,27 +33,27 @@ class ScheduleParser:
 
     # Get matches as match-objects
     def get_matches(self):
-        i = 0
         for x in self.week:
-            i += 1
+            self.match_counter += 1
 
             teams = x.find_all('td')[1].find_all('div')[0].text
             team1 = self.pickem.get_team(teams[:4].strip())
             team2 = self.pickem.get_team(teams[-5:].strip())
             result = x.find_all('td')[2].text.replace('\n', '')
 
-            match = Match(team1, team2, i)
+            match = Match(team1, team2, self.match_counter)
 
             # Check winner
             if int(result[0]) > int(result[-1:]):
                 match.winner = team1
-                print(team1.name + ' won! Score: ' + str(team1.score))
+                print(str(self.match_counter) + ': ' + team1.name + ' won! Score: ' + str(team1.score))
             elif int(result[0]) < int(result[-1:]):
                 match.winner = team2
-                print(team2.name + ' won! Score: ' + str(team2.score))
+                print(str(self.match_counter) + ': ' + team2.name + ' won! Score: ' + str(team2.score))
             else:
                 print('No winner yet!')
 
 
-sp = ScheduleParser(1)
-sp.get_matches()
+for x in range(1, 10):
+    sp = ScheduleParser(x)
+    sp.get_matches()
