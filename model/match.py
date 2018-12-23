@@ -23,7 +23,10 @@ class Match:
                 raise ValueError('Winning team not part of match!')
 
     def reward(self, picked_team):
-        if self.winner is not None:
+        if self.winner is None:
+            raise SystemError('Match does not have a winner!')
+
+        if picked_team == self.winner:
             r = self.team_difference / 4
 
             if r > 1 and picked_team != self.favorite:
@@ -31,4 +34,4 @@ class Match:
             else:
                 return 1
         else:
-            raise SystemError('Match does not have a winner!')
+            return 0
