@@ -1,10 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 from model.match import Match
+from model.pickem import Pickem
 
 
 class ScheduleParser:
     def __init__(self, week_as_int):
+        # Create pickem instance
+        self.pickem = Pickem()
+
         # Get page and pass it to bs4
         self.url = 'https://lol.gamepedia.com/EU_LCS/2018_Season/Summer_Season'
         self.page = requests.get(self.url)
@@ -32,18 +36,21 @@ class ScheduleParser:
             i += 1
 
             teams = x.find_all('td')[1].find_all('div')[0].text
-            team1 = teams[:4].strip()
-            team2 = teams[-5:].strip()
+            team1 = self.pickem.get_team(teams[:4].strip())
+            team2 = self.pickem.get_team(teams[-5:].strip())
             result = x.find_all('td')[2].text.replace('\n', '')
 
             match = Match(team1, team2, i)
 
-            if result[0] == '1':
-                print(team1 + " won!")
-            elif result[-1:] == '1':
-                print(team2 + ' won!')
-
-
+            # Check winner
+            if int(result[0]) > int(result[-1:]):
+                match.winner = team1
+                print(team1.name + ' won! Score: ' + str(team1.score))
+            elif int(result[0]) < int(result[-1:]):
+                match.winner = team2
+                print(team2.name + ' won! Score: ' + str(team2.score))
+            else:
+                print('No winner yet!')
 
 
 sp = ScheduleParser(1)

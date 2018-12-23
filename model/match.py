@@ -18,6 +18,14 @@ class Match:
     def winner(self, team):
         if team == self.team_one or team == self.team_two:
             self._winner = team
+
+            # Add win to winning team and loss to losing team
+            if team == self.team_one:
+                self.team_one.add_win()
+                self.team_two.add_loss()
+            else:
+                self.team_two.add_win()
+                self.team_one.add_loss()
         else:
             if team is not None:
                 raise ValueError('Winning team not part of match!')
