@@ -4,18 +4,22 @@ from model.match import Match
 from model.pickem import Pickem
 
 
+# Want to make class a singleton, but don't know how in Python
 class ScheduleParser:
+    # Match id counter
     match_counter = 0
 
-    def __init__(self, week_as_int):
-        # Get page and pass it to bs4
-        self.url = 'https://lol.gamepedia.com/EU_LCS/2018_Season/Summer_Season'
-        self.page = requests.get(self.url)
-        self.soup = BeautifulSoup(self.page.content, "html.parser")
+    # Get page and pass it to bs4
+    url = 'https://lol.gamepedia.com/EU_LCS/2018_Season/Summer_Season'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, "html.parser")
 
-        # Find relevant data
-        self.schedule_table = self.soup.find('div', attrs={'class': 'tabs-dynamic'})
-        self.weeks = self.schedule_table.find('div', attrs={'class': 'tabs-content'})
+    # Find relevant data
+    schedule_table = soup.find('div', attrs={'class': 'tabs-dynamic'})
+    weeks = schedule_table.find('div', attrs={'class': 'tabs-content'})
+
+    def __init__(self, week_as_int):
+        # Get given week's data
         self.week = self.weeks.find('div', attrs={'class': 'content' + str(week_as_int)}).find_all('tr')[2:]
 
     # Print given week
@@ -49,6 +53,12 @@ class ScheduleParser:
                 print(str(ScheduleParser.match_counter) + ': ' + team2.name + ' won! Score: ' + str(team2.score))
             else:
                 print('No winner yet!')
+
+    # Update page data
+    @staticmethod
+    def update():
+        ScheduleParser.page = requests.get(ScheduleParser.url)
+        ScheduleParser.soup = BeautifulSoup(ScheduleParser.page.content, "html.parser")
 
 
 for x in range(1, 10):
