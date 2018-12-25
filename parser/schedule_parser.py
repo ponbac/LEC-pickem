@@ -8,9 +8,6 @@ class ScheduleParser:
     match_counter = 0
 
     def __init__(self, week_as_int):
-        # Create pickem instance
-        self.pickem = Pickem()
-
         # Get page and pass it to bs4
         self.url = 'https://lol.gamepedia.com/EU_LCS/2018_Season/Summer_Season'
         self.page = requests.get(self.url)
@@ -37,8 +34,8 @@ class ScheduleParser:
             ScheduleParser.match_counter += 1
 
             teams = x.find_all('td')[1].find_all('div')[0].text
-            team1 = self.pickem.get_team(teams[:4].strip())
-            team2 = self.pickem.get_team(teams[-5:].strip())
+            team1 = Pickem.get_team(teams[:4].strip())
+            team2 = Pickem.get_team(teams[-5:].strip())
             result = x.find_all('td')[2].text.replace('\n', '')
 
             match = Match(team1, team2, self.match_counter)

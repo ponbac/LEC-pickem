@@ -5,12 +5,14 @@ from model.match import Match
 class Pickem:
     teams = {}
     matches = []
+    users = []
 
     def __init__(self):
         print('Pickem init...')
 
     # Get team from key, creates new if none exists
-    def get_team(self, key):
+    @staticmethod
+    def get_team(key):
         # Check if team already exists, if not create new
         try:
             Pickem.teams[key]
@@ -19,3 +21,7 @@ class Pickem:
             Pickem.teams[key] = new_team
 
         return Pickem.teams[key]
+
+    # TODO
+    def get_user(self, username):
+        print('TODO!')
