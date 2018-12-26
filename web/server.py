@@ -15,7 +15,10 @@ def home():
         for x in range(1, 10):
             sp = ScheduleParser(x)
             for m in sp.get_matches():
-                match_list += '<p>' + str(m.match_id) + ': ' + m.team_one.name + ' vs ' + m.team_two.name + ', winner: ' + m.winner.name + '</p>'
+                team_one_btn = '<button class="team-one-btn" type="button">' + m.team_one.name + '</button>'
+                team_two_btn = '<button class="team-two-btn" type="button">' + m.team_two.name + '</button>'
+                match_list += '<div id="' + 'match-' + str(m.match_id) + '" class="match-btn-group">' + str(m.match_id)\
+                              + ': ' + team_one_btn + 'vs' + team_two_btn + '</div>'
 
         return render_template('index.html') + match_list + '<a href="/logout">Logout</a>'
 
@@ -44,7 +47,7 @@ def leaderboard():
 
 
 if __name__ == '__main__':
-    app.secret_key = os.urandom(12)
+    app.secret_key = os.urandom(16)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     app.run(host=s.getsockname()[0])

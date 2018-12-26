@@ -5,7 +5,7 @@ from model.match import Match
 class Pickem:
     teams = {}
     matches = []
-    users = []
+    users = {}
 
     def __init__(self):
         print('Pickem init...')
