@@ -22,6 +22,6 @@ class Pickem:
 
         return Pickem.teams[key]
 
-    # TODO
+    # TODO Get user or create new one?
     def get_user(self, username):
         print('TODO!')

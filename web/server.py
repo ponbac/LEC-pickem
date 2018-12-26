@@ -11,7 +11,7 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        match_list = ''
+        match_list = '<h3>User: ' + session['username'] + '</h3>'
         for x in range(1, 10):
             sp = ScheduleParser(x)
             for m in sp.get_matches():
@@ -23,6 +23,7 @@ def home():
 @app.route('/login', methods=['POST'])
 def do_admin_login():
     if request.form['password'].lower() == 'backman' and request.form['username'].lower() == 'pontus':
+        session['username'] = request.form['username']
         session['logged_in'] = True
         return home()
     else:
@@ -34,6 +35,12 @@ def do_admin_login():
 def logout():
     session['logged_in'] = False
     return home()
+
+
+# TODO Implement leaderboard!
+@app.route('/leaderboard')
+def leaderboard():
+    return 'Leaderboard: #1 Pontus'
 
 
 if __name__ == '__main__':
