@@ -12,7 +12,10 @@ class Match:
 
     @property
     def winner(self):
-        return self._winner
+        if self._winner is not None:
+            return self._winner
+        else:
+            return 'no winner yet!'
 
     @winner.setter
     def winner(self, team):

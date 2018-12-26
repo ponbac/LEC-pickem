@@ -34,6 +34,8 @@ class ScheduleParser:
 
     # Get matches as match-objects
     def get_matches(self):
+        matches = []
+
         for x in self.week:
             ScheduleParser.match_counter += 1
 
@@ -42,7 +44,7 @@ class ScheduleParser:
             team2 = Pickem.get_team(teams[-5:].strip())
             result = x.find_all('td')[2].text.replace('\n', '')
 
-            match = Match(team1, team2, self.match_counter)
+            match = Match(team1, team2, ScheduleParser.match_counter)
 
             # Check winner
             if int(result[0]) > int(result[-1:]):
@@ -54,13 +56,17 @@ class ScheduleParser:
             else:
                 print('No winner yet!')
 
+            matches.append(match)
+
+        return matches
+
     # Update page data
     @staticmethod
     def update():
         ScheduleParser.page = requests.get(ScheduleParser.url)
-        ScheduleParser.soup = BeautifulSoup(ScheduleParser.page.content, "html.parser")
+        ScheduleParser.soup = BeautifulSoup(ScheduleParser.page.content, "html.parse")
 
 
-for x in range(1, 10):
-    sp = ScheduleParser(x)
-    sp.get_matches()
+#for x in range(1, 10):
+#    sp = ScheduleParser(x)
+#    sp.get_matches()
