@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 import os
 import socket
-from parse.schedule_parser import ScheduleParser
+from model.pickem import Pickem
 
 app = Flask(__name__)
 
@@ -12,15 +12,13 @@ def home():
         return render_template('login.html')
     else:
         match_list = '<h3>User: ' + session['username'] + '</h3>'
-        for x in range(1, 10):
-            sp = ScheduleParser(x)
-            for m in sp.get_matches():
-                team_one_btn = '<button class="team-one-btn" type="button">' + m.team_one.name + '</button>'
-                team_two_btn = '<button class="team-two-btn" type="button">' + m.team_two.name + '</button>'
-                match_list += '<div id="' + 'match-' + str(m.match_id) + '" class="match-btn-group">' + str(m.match_id)\
-                              + ': ' + team_one_btn + 'vs' + team_two_btn + '</div>'
+        for m in Pickem.matches:
+            team_one_btn = '<button class="team-one-btn" type="button">' + m.team_one.name + '</button>'
+            team_two_btn = '<button class="team-two-btn" type="button">' + m.team_two.name + '</button>'
+            match_list += '<div id="' + 'match-' + str(m.match_id) + '" class="match-btn-group">' + str(m.match_id) \
+                          + ': ' + team_one_btn + 'vs' + team_two_btn + '</div>'
 
-        return render_template('index.html') + match_list + '<a href="/logout">Logout</a>'
+    return render_template('index.html') + match_list + '<a href="/logout">Logout</a>'
 
 
 @app.route('/login', methods=['POST'])
@@ -47,6 +45,7 @@ def leaderboard():
 
 
 if __name__ == '__main__':
+    pickem = Pickem()
     app.secret_key = os.urandom(16)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))

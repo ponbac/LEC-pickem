@@ -1,4 +1,5 @@
 from model.team import Team
+from parse.schedule_parser import ScheduleParser
 from model.match import Match
 
 
@@ -9,6 +10,10 @@ class Pickem:
 
     def __init__(self):
         print('Pickem init...')
+        for x in range(1, 10):
+            sp = ScheduleParser(x)
+            for m in sp.get_matches():
+                Pickem.matches.append(m)
 
     # Get team from key, creates new if none exists
     @staticmethod
